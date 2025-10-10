@@ -35,23 +35,58 @@ Les routes principales sont définies dans `www/index.php:3` et délèguent aux 
 
 - Créer le schéma de base (à exécuter dans MySQL ou via Adminer) :
   ```sql 
-    CREATE TABLE user (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      email VARCHAR(255) NOT NULL UNIQUE,
-      hashed_password VARCHAR(255) NOT NULL,
-      username VARCHAR(100) NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+    CREATE TABLE `activity` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `name` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+      `description` text NOT NULL,
+      `capacity` int NOT NULL,
+      `is_active` tinyint NOT NULL DEFAULT '1',
+      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-    CREATE TABLE family (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      adress VARCHAR(255) NOT NULL,
-      phone VARCHAR(30),
-      email VARCHAR(255),
-      members INT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+
+    CREATE TABLE `family` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `name` char(255) NOT NULL,
+      `email` char(255) NOT NULL,
+      `phone` char(255) NOT NULL,
+      `adress` char(255) NOT NULL,
+      `members` int DEFAULT NULL,
+      `is_actif` tinyint NOT NULL DEFAULT '1',
+      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `uptaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+    CREATE TABLE `family_activity` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `id_family` int NOT NULL,
+      `id_activity` int NOT NULL,
+      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      KEY `id_family` (`id_family`),
+      KEY `id_activity` (`id_activity`),
+      CONSTRAINT `family_activity_ibfk_1` FOREIGN KEY (`id_family`) REFERENCES `family` (`id`),
+      CONSTRAINT `family_activity_ibfk_2` FOREIGN KEY (`id_activity`) REFERENCES `activity` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+    CREATE TABLE `user` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `username` char(255) NOT NULL,
+      `email` char(255) NOT NULL,
+      `hashed_password` char(255) NOT NULL,
+      `role` char(255) NOT NULL DEFAULT 'USER',
+      `is_actif` tinyint NOT NULL DEFAULT '1',
+      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `email` (`email`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 - Arrêter les services :
     ```bash
