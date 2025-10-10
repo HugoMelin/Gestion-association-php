@@ -1,0 +1,13 @@
+# OS generated files
+.DS_Store
+
+# Editor settings
+.idea/
+.vscode/
+
+# Dependencies
+vendor/
+
+# Environment files
+.env
+.env.local

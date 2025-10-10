@@ -1,0 +1,6 @@
+localhost {
+  root * /var/www/html
+  encode zstd gzip
+  php_fastcgi php:9000
+  file_server
+}
