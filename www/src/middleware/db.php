@@ -11,3 +11,7 @@ class Db extends PDO {
     $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 }
+
+function getDbConnection() {
+  return new Db();
+}

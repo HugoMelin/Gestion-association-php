@@ -7,6 +7,7 @@ require 'src/controllers/register.php';
 require 'src/api/register.php';
 require 'src/controllers/logout.php';
 require 'src/api/family.php';
+require 'src/api/activity.php';
 
 $path = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
@@ -33,6 +34,9 @@ switch ($path) {
     break;
   case '/api/family':
     familyApi();
+    break;
+  case '/api/activity':
+    activityApi();
     break;
   default:
     echo "404 Not Found";

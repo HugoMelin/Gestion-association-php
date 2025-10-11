@@ -1,26 +1,30 @@
 <?php
 require_once 'src/middleware/db.php';
 
-function getAllFamilies() {
+function getAllActivities() {
     $db = getDbConnection();
-    $stmt = $db->query("SELECT * FROM family");
+    $stmt = $db->query("SELECT * FROM activity");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getFamilyById($id) {
+function getActivityById($id) {
     $db = getDbConnection();
-    $stmt = $db->prepare("SELECT * FROM family WHERE id = :id");
+    $stmt = $db->prepare("SELECT * FROM activity WHERE id = :id");
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function postFamily($name, $adress, $phone, $email, int $members=null) {
+function postActivity($name, $description, int $capacity = 0) {
     $db = getDbConnection();
-    $stmt = $db->prepare("INSERT INTO family (name, adress, phone, email, members) VALUES (:name, :adress, :phone, :email, :members)");
-    return $stmt->execute(['name' => $name, 'adress' => $adress, 'phone' => $phone, 'email' => $email, 'members' => $members]);
+    $stmt = $db->prepare("INSERT INTO activity (name, description, capacity) VALUES (:name, :description, :capacity)");
+    return $stmt->execute([
+        'name' => $name, 
+        'description' => $description, 
+        'capacity' => $capacity, 
+    ]);
 }
 
-function putFamily($id, $fields) {
+function putActivity($id, $fields) {
     $db = getDbConnection();
 
     $setParts = [];
@@ -37,14 +41,14 @@ function putFamily($id, $fields) {
         return false;
     }
 
-    $sql  = 'UPDATE family SET ' . implode(', ', $setParts) . ' WHERE id = :id';
+    $sql  = 'UPDATE activity SET ' . implode(', ', $setParts) . ' WHERE id = :id';
     $stmt = $db->prepare($sql);
 
     return $stmt->execute($params);
 }
 
-function deleteFamily($id) {
+function deleteActivity($id) {
     $db = getDbConnection();
-    $stmt = $db->prepare("DELETE FROM family WHERE id = :id");
+    $stmt = $db->prepare("DELETE FROM activity WHERE id = :id");
     return $stmt->execute(['id' => $id]);
 }
