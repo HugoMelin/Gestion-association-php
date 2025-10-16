@@ -9,14 +9,18 @@ require 'src/controllers/logout.php';
 require 'src/api/family.php';
 require 'src/api/activity.php';
 require 'src/api/family-activity.php';
+require 'src/controllers/family.php';
 
 $path = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 switch ($path) {
   case '':
   case '/':
-    echo "Welcome to the homepage!";
+    echo "Welcome to the homepage! <br>";
     echo $_SESSION['user']['username'] ?? 'Guest';
+    break;
+  case '/dashboard/familles':
+    familyView();
     break;
   case '/connexion':
     loginView();
