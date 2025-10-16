@@ -2,7 +2,7 @@
 require_once 'src/middleware/db.php';
 
 function register($data) {
-  $db = new Db();
+  $db = Db::getConnexion();
 
   $stmt = $db->prepare("SELECT * FROM user WHERE email = :email");
   $stmt->bindParam(':email', $data['email']);

@@ -1,17 +1,22 @@
 <?php 
 class Db extends PDO {
-  private $host = 'mysql';
-  private $db_name = 'db';
-  private $username = 'user';
-  private $password = 'password';
+  private static ?PDO $instance = null;
+  
+  public static function getConnexion(): ?PDO {
+    if (self::$instance === null) {
+      $host = 'mysql';
+      $dbname = 'db';
+      $username = 'user';
+      $password = 'password';
+      $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
-  function __construct() {
-    $dsn = "mysql:host=$this->host;dbname=$this->db_name;charset=utf8mb4";
-    parent::__construct($dsn, $this->username, $this->password);
-    $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      try {
+        self::$instance = new PDO($dsn, $username, $password);
+        self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      } catch (PDOException $e) {
+        die("Database connection failed: " . $e->getMessage());
+      }
+    }
+    return self::$instance;
   }
-}
-
-function getDbConnection() {
-  return new Db();
 }

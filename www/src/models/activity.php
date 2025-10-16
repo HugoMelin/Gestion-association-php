@@ -2,20 +2,20 @@
 require_once 'src/middleware/db.php';
 
 function getAllActivities() {
-    $db = getDbConnection();
+    $db = Db::getConnexion();
     $stmt = $db->query("SELECT * FROM activity");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getActivityById($id) {
-    $db = getDbConnection();
+    $db = Db::getConnexion();
     $stmt = $db->prepare("SELECT * FROM activity WHERE id = :id");
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function postActivity($name, $description, int $capacity = 0) {
-    $db = getDbConnection();
+    $db = Db::getConnexion();
     $stmt = $db->prepare("INSERT INTO activity (name, description, capacity) VALUES (:name, :description, :capacity)");
     return $stmt->execute([
         'name' => $name, 
@@ -25,7 +25,7 @@ function postActivity($name, $description, int $capacity = 0) {
 }
 
 function putActivity($id, $fields) {
-    $db = getDbConnection();
+    $db = Db::getConnexion();
 
     $setParts = [];
     $params   = ['id' => $id];
@@ -48,7 +48,7 @@ function putActivity($id, $fields) {
 }
 
 function deleteActivity($id) {
-    $db = getDbConnection();
+    $db = Db::getConnexion();
     $stmt = $db->prepare("DELETE FROM activity WHERE id = :id");
     return $stmt->execute(['id' => $id]);
 }
